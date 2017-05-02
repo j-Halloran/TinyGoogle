@@ -45,7 +45,7 @@ public class TinyGoogleSpark{
       //load book data
       JavaPairRDD<String,String> input2 = sc.wholeTextFiles(inputFile);
 
-      //Split book data using lambdas
+      //Split book data using inner functions
       JavaPairRDD<String, String> words = input2.flatMapValues(
         new Function<String,Iterable<String>>(){
           @Override
@@ -59,7 +59,7 @@ public class TinyGoogleSpark{
           }
         });
 
-        //map to filename and word again using lambdas
+        //map to filename and word again using an inner func
         JavaRDD<String> count = words.map(new Function<Tuple2<String, String>, String>(){
           @Override
           public String call(Tuple2<String,String> fileName) throws Exception{
@@ -141,7 +141,7 @@ public class TinyGoogleSpark{
 
        System.out.println("hdfs stiff complete");
 
-       // Load our query with yet another lambda
+       // Load our query with yet another inner functionflam
        JavaRDD<String> queryRDD = sc.textFile("query.txt");
        JavaRDD<String> words = queryRDD.flatMap(new FlatMapFunction<String, String>() {
          @Override public Iterator<String> call(String s) {
@@ -150,7 +150,7 @@ public class TinyGoogleSpark{
        });
 
        //Read each line of the invertedindex and at each line generate a tuple for
-       //words that match any part of the query text using another lambda
+       //words that match any part of the query text using another inner func
        JavaPairRDD<String, String> pairs = words.mapToPair(new PairFunction<String, String, String>() {
          public Tuple2<String, String> call(String s) throws IOException{
            Path pt=new Path("invertedindex.txt");
